@@ -1,0 +1,27 @@
+{
+  "name": "smart-engineering-plugin",
+  "owner": {
+    "name": "Prasad Premkumar"
+  },
+  "metadata": {
+    "description": "Personal marketplace for the smart-engineering plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "smart-engineering",
+      "description": "Lean compound-engineering loop: plan, work, review, debug, ship, and capture learnings so each unit of work makes the next one easier",
+      "author": {
+        "name": "Prasad Premkumar"
+      },
+      "tags": [
+        "planning",
+        "code-review",
+        "debugging",
+        "workflow-automation",
+        "knowledge-management"
+      ],
+      "source": "./"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "smart-engineering",
+  "version": "1.0.0",
+  "description": "Lean compound-engineering loop: plan, work, review, debug, ship, and capture learnings so each unit of work makes the next one easier",
+  "author": {
+    "name": "Prasad Premkumar"
+  },
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "code-review",
+    "debugging",
+    "workflows",
+    "compound-engineering"
+  ]
+}
