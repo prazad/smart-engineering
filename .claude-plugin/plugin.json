@@ -1,7 +1,7 @@
 {
   "name": "smart-engineering",
-  "version": "1.0.0",
-  "description": "Lean compound-engineering loop: plan, work, review, debug, ship, and capture learnings so each unit of work makes the next one easier",
+  "version": "1.1.0",
+  "description": "Lean compound-engineering loop: plan, work, review, debug, ship, and capture learnings so each unit of work makes the next one easier — plus loop-engineering bodies (goal convergence, PR babysitting, backlog discovery) for /loop and /schedule",
   "author": {
     "name": "Prasad Premkumar"
   },
@@ -11,6 +11,7 @@
     "code-review",
     "debugging",
     "workflows",
-    "compound-engineering"
+    "compound-engineering",
+    "loop-engineering"
   ]
 }
