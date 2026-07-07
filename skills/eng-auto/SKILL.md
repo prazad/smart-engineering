@@ -12,6 +12,16 @@ Run the full loop without stopping for input. The user is stepping away; every d
 
 If the input is empty, or so vague that any plan would be a guess at *what the user wants* (not merely *how to build it*), stop immediately and ask — that's the one legitimate question. How-to ambiguity is resolved autonomously with recorded assumptions.
 
+## Resume (idempotent re-invocation)
+
+Before starting, look for evidence of a prior run of *this* request: a `feat/<slug>`/`fix/<slug>` branch or a PR matching the plan's slug. If found, resume from the evidence instead of restarting:
+
+- Branch with commits, no PR → resume at **Work** (its per-unit idempotency check skips finished units).
+- PR open with CI red or review comments pending → resume at **Ship**'s CI watch and repair.
+- PR merged, or checks green with nothing pending → report done and exit.
+
+This makes the pipeline a valid loop body: `/loop 20m /eng-auto <plan>` re-invokes until the PR is green, and an interrupted run costs only the re-check, not the work.
+
 ## Pipeline
 
 Each stage invokes the named skill in pipeline mode (no interactive questions; assumptions recorded in the artifacts). Announce each stage transition in one line so the transcript reads as a progress log.
@@ -28,7 +38,7 @@ Each stage invokes the named skill in pipeline mode (no interactive questions; a
 - Never work on the default branch; the pipeline creates its own feature branch (or worktree if the workspace is dirty with unrelated changes).
 - Never force-push, never touch branches other than the pipeline's own.
 - Quality gates are not skippable for speed: red-test evidence in work, verified findings in review, root-cause CI repairs in ship.
-- If any stage fails twice in a row on the same error, stop and report state honestly (branch, commits, what passed, what's broken) instead of looping.
+- **Budgets, not thrashing:** each stage gets 2 attempts on the same error (ship's CI repair gets its 3). When a budget is spent, stop and report state honestly — branch, commits, what passed, what's broken, best diagnosis. Because resume is idempotent, a loud stop loses nothing: the user (or the next `/loop` pass, after the blocker is cleared) picks up from the evidence.
 
 ## Final report
 

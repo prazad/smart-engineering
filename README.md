@@ -2,7 +2,7 @@
 
 A lean, Claude-Code-native rewrite of the compound-engineering workflow: **each unit of work should make the next one easier.**
 
-8 skills, no ceremony. The loop: plan → work → simplify → review → ship → learn — and the learnings feed the next plan.
+11 skills, no ceremony. The loop: plan → work → simplify → review → ship → learn — and the learnings feed the next plan. Plus three loop-engineering skills (goal convergence, PR babysitting, backlog discovery) built as idempotent loop bodies for Claude Code's native `/loop` and `/schedule`.
 
 ## Skills
 
@@ -15,7 +15,10 @@ A lean, Claude-Code-native rewrite of the compound-engineering workflow: **each 
 | `/eng-ship` | Commit → push → PR → optionally watch CI to green |
 | `/eng-debug` | Reproduce → causal chain to root cause → fix proven by a regression test |
 | `/eng-learn` | Capture the lesson into `docs/solutions/` so future sessions start smarter |
-| `/eng-auto` | The whole pipeline hands-off: plan, build, review+fix, ship, watch CI |
+| `/eng-auto` | The whole pipeline hands-off: plan, build, review+fix, ship, watch CI — resumes idempotently if re-invoked |
+| `/eng-goal` | Converge on an objectively verifiable goal: run the verification gate, fix root cause, repeat until green or budget spent |
+| `/eng-babysit` | One pass over open PRs — repair red CI, address review comments, flag ready-to-merge — then exit |
+| `/eng-backlog` | Find the single next unbuilt item (unshipped plan, ready issue, clear TODO) and run it through `/eng-auto` |
 
 ## The compounding mechanism
 
@@ -37,7 +40,23 @@ A lean, Claude-Code-native rewrite of the compound-engineering workflow: **each 
 
 # Hands-off
 /eng-auto docs/plans/2026-07-05-rate-limiting.md
+
+# Goal convergence
+/eng-goal make tests/checkout deterministic --verify "pytest tests/checkout -q" --max 8
 ```
+
+## Running as loops
+
+The loop-body skills (`eng-babysit`, `eng-backlog`, `eng-auto`, `eng-goal`) each do one idempotent pass and exit — no work to do means an immediate clean exit. Cadence comes from Claude Code's native primitives, not from the plugin:
+
+```text
+/loop 15m /eng-babysit                    # keep my open PRs green and answered
+/loop /eng-backlog                        # self-paced backlog burner: one item per pass
+/loop 20m /eng-auto docs/plans/2026-07-05-rate-limiting.md   # re-invoke until the PR is green
+/schedule ...                             # same bodies, cloud cadence
+```
+
+This follows the loop-engineering pattern (Boris Cherny / Peter Steinberger): a trigger, a verifiable goal, a verification gate, an iteration budget, and a loud stop — with the plugin supplying well-formed loop *bodies* and the platform supplying the loop *driver*.
 
 ## Install
 
